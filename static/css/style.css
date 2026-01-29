@@ -63,6 +63,8 @@
 html {
     font-size: 16px;
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 body {
@@ -73,6 +75,8 @@ body {
     background-color: var(--color-bg-dark);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 img {
@@ -1030,6 +1034,10 @@ button {
     .hero {
         min-height: 100vh !important;
         padding: 0 !important;
+    }
+
+    .contacts {
+        padding-bottom: 80px !important;
     }
 
     /* === Шапка и навигация === */
