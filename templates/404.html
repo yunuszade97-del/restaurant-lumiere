@@ -1,0 +1,104 @@
+{# ============================================================================ #}
+{# СТРАНИЦА ОШИБКИ 404 #}
+{# ============================================================================ #}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ error_code|default(404) }} — Страница не найдена | LUMIÈRE</title>
+
+    <!-- Подключаем стили -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        /* Дополнительные стили для страницы 404 */
+        .error-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--color-bg-dark) 0%, #1a1a2e 100%);
+        }
+
+        .error-code {
+            font-family: var(--font-heading);
+            font-size: clamp(6rem, 20vw, 12rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .error-title {
+            font-family: var(--font-heading);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: var(--color-white);
+            margin-bottom: 1rem;
+        }
+
+        .error-description {
+            font-size: 1.1rem;
+            color: var(--color-text-muted);
+            max-width: 400px;
+            margin-bottom: 2rem;
+        }
+
+        .error-home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--color-gold);
+            color: var(--color-bg-dark);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .error-home-link:hover {
+            background: var(--color-gold-light);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="error-page">
+        <!-- Код ошибки -->
+        <div class="error-code">{{ error_code|default(404) }}</div>
+
+        <!-- Заголовок -->
+        <h1 class="error-title">
+            {{ error_message|default('Страница не найдена') }}
+        </h1>
+
+        <!-- Описание -->
+        <p class="error-description">
+            К сожалению, запрашиваемая страница не существует.
+            Возможно, она была перемещена или удалена.
+        </p>
+
+        <!-- Кнопка возврата на главную -->
+        <a href="{{ url_for('index') }}" class="error-home-link">
+            <span>←</span>
+            Вернуться на главную
+        </a>
+    </div>
+</body>
+
+</html>

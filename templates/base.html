@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <!-- ================================================================== -->
+    <!-- МЕТА-ТЕГИ И SEO -->
+    <!-- ================================================================== -->
+    <meta charset="UTF-8">
+    <!-- Viewport для адаптивного дизайна на мобильных устройствах -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO: Описание сайта для поисковых систем -->
+    <meta name="description" content="Премиум ресторан с изысканной кухней. Забронируйте столик онлайн.">
+    <meta name="keywords" content="ресторан, премиум, кухня, бронирование, Москва">
+
+    <!-- Заголовок страницы (отображается во вкладке браузера) -->
+    <title>{% block title %}LUMIÈRE — Премиум Ресторан{% endblock %}</title>
+
+    <!-- ================================================================== -->
+    <!-- ПОДКЛЮЧЕНИЕ ВНЕШНИХ СТИЛЕЙ (CDN) -->
+    <!-- ================================================================== -->
+    <!-- fullPage.js CSS - стили для поэкранной прокрутки -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css">
+
+    <!-- Swiper.js CSS - стили для слайдера меню -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+    <!-- Google Fonts - премиум шрифты Playfair Display и Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- ================================================================== -->
+    <!-- ПОДКЛЮЧЕНИЕ СОБСТВЕННЫХ СТИЛЕЙ -->
+    <!-- ================================================================== -->
+    <!-- url_for() генерирует правильный путь к статическим файлам -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Дополнительные стили для конкретной страницы -->
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- ================================================================== -->
+    <!-- ШАПКА САЙТА (ФИКСИРОВАННАЯ НАВИГАЦИЯ) -->
+    <!-- ================================================================== -->
+    <header class="header" id="header">
+        <div class="header__container">
+            <!-- Логотип ресторана -->
+            <a href="#home" class="header__logo">
+                <span class="logo-text">LUMIÈRE</span>
+            </a>
+
+            <!-- Навигационное меню -->
+            <nav class="header__nav" id="nav">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="#home" class="nav__link" data-menuanchor="home">Главная</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#about" class="nav__link" data-menuanchor="about">О нас</a>
+                    </li>
+                    <li class="nav__item">
+                        <!-- 
+                        ВНЕШНЯЯ ССЫЛКА НА МЕНЮ (Google Drive / PDF)
+                        Замените URL ниже на вашу ссылку Google Drive или другой сервис
+                        target="_blank" - открывает в новой вкладке
+                        rel="noopener noreferrer" - безопасность для внешних ссылок
+                        -->
+                        <a href="https://drive.google.com/your-menu-link" class="nav__link" target="_blank"
+                            rel="noopener noreferrer">Меню</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#contacts" class="nav__link" data-menuanchor="contacts">Контакты</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Кнопка бронирования в шапке -->
+            <a href="#contacts" class="header__btn btn btn--outline">Забронировать</a>
+
+            <!-- Кнопка мобильного меню (бургер) -->
+            <button class="header__burger" id="burger" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ================================================================== -->
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <!-- ================================================================== -->
+    <!-- fullpage - контейнер для поэкранной прокрутки fullPage.js -->
+    <main id="fullpage">
+        {% block content %}
+        <!-- Контент страницы подставляется сюда -->
+        {% endblock %}
+    </main>
+
+    <!-- ================================================================== -->
+    <!-- ПОДКЛЮЧЕНИЕ СКРИПТОВ (JavaScript) -->
+    <!-- ================================================================== -->
+    <!-- fullPage.js - библиотека поэкранной прокрутки -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js"></script>
+
+    <!-- Swiper.js - библиотека слайдера -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Собственный JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <!-- Дополнительные скрипты для конкретной страницы -->
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>
