@@ -990,14 +990,15 @@ button {
     }
 
     /* === Секции в режиме обычной прокрутки === */
-    .section {
+    /* Применяется ТОЛЬКО когда fullPage.js в responsive режиме */
+    .fp-responsive .section {
         min-height: auto !important;
         height: auto !important;
         padding: 80px 0 60px !important;
     }
 
-    /* Hero секция на весь экран */
-    .hero {
+    /* Hero секция на весь экран - всегда */
+    .fp-responsive .hero {
         min-height: 100vh !important;
         padding: 0 !important;
     }

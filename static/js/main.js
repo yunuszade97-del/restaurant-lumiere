@@ -3,276 +3,67 @@
  * ГЛАВНЫЙ JAVASCRIPT ФАЙЛ
  * ==============================================================================
  * Описание: Инициализация fullPage.js, Swiper.js и управление интерфейсом
+ * Версия: 2.0 - Исправлены баги инициализации
  * ==============================================================================
  */
 
 // ==============================================================================
-// ОЖИДАНИЕ ЗАГРУЗКИ DOM
+// ОЖИДАНИЕ ПОЛНОЙ ЗАГРУЗКИ СТРАНИЦЫ
 // ==============================================================================
-// DOMContentLoaded срабатывает когда HTML полностью загружен и обработан
-document.addEventListener('DOMContentLoaded', function () {
+// Используем 'load' вместо 'DOMContentLoaded' для гарантии загрузки всех ресурсов
+window.addEventListener('load', function () {
+    'use strict';
 
     // ==========================================================================
-    // ИНИЦИАЛИЗАЦИЯ FULLPAGE.JS
-    // ==========================================================================
-    // fullPage.js - библиотека для создания полноэкранных секций с плавной
-    // поэкранной прокруткой (One Page Scroll эффект)
+    // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (определяем ПЕРВЫМИ)
     // ==========================================================================
 
-    // Определяем, является ли устройство мобильным (ширина < 768px)
-    const isMobile = window.innerWidth < 768;
-
-    const fullPageInstance = new fullpage('#fullpage', {
-        // ------ Привязка якорей для навигации (соответствуют data-anchor в HTML) ------
-        anchors: ['home', 'about', 'menu', 'contacts'],
-
-        // ------ Привязка навигации к ссылкам меню ------
-        menu: '#nav',
-
-        // ------ Анимация прокрутки ------
-        // На мобильных делаем быстрее для отзывчивости
-        scrollingSpeed: isMobile ? 700 : 900,
-
-        // ------ Эффект перехода ------
-        easingcss3: 'cubic-bezier(0.86, 0, 0.07, 1)',
-
-        // ------ Автоматическая прокрутка ------
-        // Отключаем на мобильных для естественного скролла
-        autoScrolling: !isMobile,
-
-        // ------ Fit to Section ------
-        // Подгоняет секцию под экран при остановке скролла
-        fitToSection: !isMobile,
-        fitToSectionDelay: 600,
-
-        // ------ Адаптивность ------
-        // Отключаем fullPage.js на маленьких экранах (< 768px)
-        responsiveWidth: 768,
-        responsiveHeight: 0,
-
-        // ------ Навигация (боковые точки) ------
-        navigation: !isMobile,
-        navigationPosition: 'right',
-        navigationTooltips: ['Главная', 'О нас', 'Меню', 'Контакты'],
-        showActiveTooltip: false,
-
-        // ------ Поведение при скролле ------
-        scrollOverflow: true,
-        scrollOverflowReset: true,
-
-        // ------ Тачпад и мышь ------
-        normalScrollElements: '.swiper-wrapper, .booking-form',
-
-        // ------ Чувствительность скролла ------
-        touchSensitivity: 10,
-
-        // ------ Анимация секций ------
-        css3: true,
-
-        // ------ Лицензионный ключ ------
-        licenseKey: 'gplv3-license',
-
-        // ------ Callbacks ------
-
-        afterLoad: function (origin, destination, direction) {
-            const currentAnchor = destination.anchor;
-            updateActiveNavLink(currentAnchor);
-
-            // Добавляем класс к header при уходе с первой секции
-            const header = document.getElementById('header');
-            if (destination.index > 0) {
-                header.classList.add('header--scrolled');
-            } else {
-                header.classList.remove('header--scrolled');
-            }
-
-            // Анимация элементов при появлении секции
-            const section = destination.item;
-            section.classList.add('section--visible');
-        },
-
-        onLeave: function (origin, destination, direction) {
-            // Закрываем мобильное меню при переходе
-            closeMobileMenu();
-        },
-
-        // Callback при изменении режима (responsive)
-        afterResponsive: function (isResponsive) {
-            console.log('📱 Responsive mode:', isResponsive ? 'ON' : 'OFF');
-        }
-    });
-
-    // ==========================================================================
-    // ИНИЦИАЛИЗАЦИЯ SWIPER.JS (СЛАЙДЕР МЕНЮ)
-    // ==========================================================================
-    // Swiper.js - мощная библиотека для создания слайдеров и каруселей
-    // ==========================================================================
-
-    const menuSwiper = new Swiper('.menu__swiper', {
-        // ------ Количество слайдов ------
-        slidesPerView: 1,              // По умолчанию 1 слайд
-
-        // ------ Отступы между слайдами ------
-        spaceBetween: 30,              // 30px между карточками
-
-        // ------ Центрирование ------
-        centeredSlides: false,
-
-        // ------ Зацикливание ------
-        loop: true,                    // Бесконечная прокрутка
-
-        // ------ Скорость анимации ------
-        speed: 600,
-
-        // ------ Автоматическая прокрутка ------
-        autoplay: {
-            delay: 4000,               // Задержка между слайдами (4 секунды)
-            disableOnInteraction: false, // Не останавливать при взаимодействии
-            pauseOnMouseEnter: true    // Пауза при наведении мыши
-        },
-
-        // ------ Пагинация (точки) ------
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true            // Точки кликабельны
-        },
-
-        // ------ Кнопки навигации ------
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev'
-        },
-
-        // ------ Брейкпоинты (адаптивность) ------
-        // Определяем количество слайдов для разных размеров экрана
-        breakpoints: {
-            // При ширине экрана >= 480px
-            480: {
-                slidesPerView: 1.5,    // 1.5 слайда (виден кусок следующего)
-                spaceBetween: 20
-            },
-            // При ширине экрана >= 768px
-            768: {
-                slidesPerView: 2,      // 2 слайда
-                spaceBetween: 25
-            },
-            // При ширине экрана >= 1024px
-            1024: {
-                slidesPerView: 3,      // 3 слайда
-                spaceBetween: 30
-            },
-            // При ширине экрана >= 1280px
-            1280: {
-                slidesPerView: 3,      // 3 слайда
-                spaceBetween: 40
-            }
-        },
-
-        // ------ Доступность ------
-        a11y: {
-            prevSlideMessage: 'Предыдущее блюдо',
-            nextSlideMessage: 'Следующее блюдо'
-        }
-    });
-
-    // ==========================================================================
-    // УПРАВЛЕНИЕ МОБИЛЬНЫМ МЕНЮ (БУРГЕР)
-    // ==========================================================================
-
+    // DOM элементы
     const burger = document.getElementById('burger');
     const nav = document.getElementById('nav');
+    const header = document.getElementById('header');
     const navLinks = document.querySelectorAll('.nav__link');
+
+    /**
+     * Закрытие мобильного меню
+     * ВАЖНО: Должна быть определена ДО fullPage.js
+     */
+    function closeMobileMenu() {
+        if (burger && nav) {
+            burger.classList.remove('active');
+            nav.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
 
     /**
      * Переключение состояния мобильного меню
      */
     function toggleMobileMenu() {
-        burger.classList.toggle('active');
-        nav.classList.toggle('active');
-
-        // Блокируем/разблокируем скролл body при открытом меню
-        document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+        if (burger && nav) {
+            burger.classList.toggle('active');
+            nav.classList.toggle('active');
+            document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+        }
     }
-
-    /**
-     * Закрытие мобильного меню
-     */
-    function closeMobileMenu() {
-        burger.classList.remove('active');
-        nav.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-
-    // Обработчик клика по бургеру
-    if (burger) {
-        burger.addEventListener('click', toggleMobileMenu);
-    }
-
-    // Закрываем меню при клике на ссылку
-    navLinks.forEach(function (link) {
-        link.addEventListener('click', closeMobileMenu);
-    });
-
-    // ==========================================================================
-    // ОБНОВЛЕНИЕ АКТИВНОЙ ССЫЛКИ В НАВИГАЦИИ
-    // ==========================================================================
 
     /**
      * Обновляет класс 'active' у ссылок навигации
+     * ВАЖНО: Должна быть определена ДО fullPage.js
      * @param {string} anchor - Якорь текущей секции
      */
     function updateActiveNavLink(anchor) {
-        // Удаляем класс active у всех ссылок
+        if (!navLinks.length) return;
+
         navLinks.forEach(function (link) {
             link.classList.remove('active');
         });
 
-        // Добавляем класс active к ссылке с соответствующим якорем
         const activeLink = document.querySelector('.nav__link[data-menuanchor="' + anchor + '"]');
         if (activeLink) {
             activeLink.classList.add('active');
         }
     }
-
-    // ==========================================================================
-    // ОБРАБОТКА ФОРМЫ БРОНИРОВАНИЯ
-    // ==========================================================================
-
-    const bookingForm = document.getElementById('bookingForm');
-
-    if (bookingForm) {
-        bookingForm.addEventListener('submit', function (event) {
-            // Предотвращаем стандартную отправку формы
-            event.preventDefault();
-
-            // Собираем данные формы
-            const formData = new FormData(bookingForm);
-            const data = {};
-
-            formData.forEach(function (value, key) {
-                data[key] = value;
-            });
-
-            // Валидация (простая проверка)
-            if (!data.name || !data.phone || !data.date || !data.time || !data.guests) {
-                showNotification('Пожалуйста, заполните все поля', 'error');
-                return;
-            }
-
-            // В реальном приложении здесь будет отправка на сервер
-            // fetch('/api/booking', { method: 'POST', body: JSON.stringify(data) })
-
-            // Показываем сообщение об успехе
-            showNotification('Спасибо! Мы свяжемся с вами для подтверждения брони.', 'success');
-
-            // Очищаем форму
-            bookingForm.reset();
-        });
-    }
-
-    // ==========================================================================
-    // УВЕДОМЛЕНИЯ
-    // ==========================================================================
 
     /**
      * Показывает уведомление пользователю
@@ -280,18 +71,15 @@ document.addEventListener('DOMContentLoaded', function () {
      * @param {string} type - Тип уведомления ('success' или 'error')
      */
     function showNotification(message, type) {
-        // Удаляем существующее уведомление если есть
         const existingNotification = document.querySelector('.notification');
         if (existingNotification) {
             existingNotification.remove();
         }
 
-        // Создаём элемент уведомления
         const notification = document.createElement('div');
         notification.className = 'notification notification--' + type;
         notification.innerHTML = '<p>' + message + '</p><button class="notification__close">&times;</button>';
 
-        // Стили для уведомления (добавляем динамически)
         notification.style.cssText = '\
             position: fixed;\
             bottom: 2rem;\
@@ -309,10 +97,8 @@ document.addEventListener('DOMContentLoaded', function () {
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);\
         ';
 
-        // Добавляем в DOM
         document.body.appendChild(notification);
 
-        // Обработчик закрытия
         const closeBtn = notification.querySelector('.notification__close');
         closeBtn.style.cssText = '\
             background: none;\
@@ -327,7 +113,6 @@ document.addEventListener('DOMContentLoaded', function () {
             notification.remove();
         });
 
-        // Автоматическое удаление через 5 секунд
         setTimeout(function () {
             if (notification.parentNode) {
                 notification.style.opacity = '0';
@@ -343,12 +128,214 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ==========================================================================
+    // ОБРАБОТЧИКИ СОБЫТИЙ МОБИЛЬНОГО МЕНЮ
+    // ==========================================================================
+
+    if (burger) {
+        burger.addEventListener('click', toggleMobileMenu);
+    }
+
+    navLinks.forEach(function (link) {
+        link.addEventListener('click', closeMobileMenu);
+    });
+
+    // ==========================================================================
+    // ИНИЦИАЛИЗАЦИЯ FULLPAGE.JS
+    // ==========================================================================
+
+    // Проверяем наличие fullpage
+    if (typeof fullpage === 'undefined') {
+        console.error('❌ fullPage.js не загружен!');
+        return;
+    }
+
+    // Определяем тип устройства
+    const isMobile = window.innerWidth < 768;
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    try {
+        new fullpage('#fullpage', {
+            // Якоря для навигации
+            anchors: ['home', 'about', 'menu', 'contacts'],
+
+            // Привязка к меню
+            menu: '#nav',
+
+            // Скорость прокрутки
+            scrollingSpeed: 800,
+
+            // Эффект перехода
+            easingcss3: 'ease-out',
+
+            // Автоматическая прокрутка (отключаем на мобильных)
+            autoScrolling: !isMobile,
+
+            // Подгонка к секции
+            fitToSection: !isMobile,
+            fitToSectionDelay: 500,
+
+            // Адаптивность - отключаем fullPage на маленьких экранах
+            responsiveWidth: 768,
+            responsiveHeight: 0,
+
+            // Боковая навигация (только на десктопе)
+            navigation: !isMobile && !isTouch,
+            navigationPosition: 'right',
+            navigationTooltips: ['Главная', 'О нас', 'Меню', 'Контакты'],
+
+            // Скролл внутри секции
+            scrollOverflow: true,
+            scrollOverflowReset: false,
+
+            // Нормальный скролл для этих элементов
+            normalScrollElements: '.swiper-wrapper, .booking-form, .contacts__form-container',
+
+            // Чувствительность для touch устройств
+            touchSensitivity: 15,
+
+            // CSS3 анимации
+            css3: true,
+
+            // Лицензия
+            licenseKey: 'gplv3-license',
+
+            // Callback после загрузки секции
+            afterLoad: function (origin, destination, direction) {
+                // Обновляем активную ссылку в меню
+                if (destination && destination.anchor) {
+                    updateActiveNavLink(destination.anchor);
+                }
+
+                // Управление стилем header
+                if (header) {
+                    if (destination && destination.index > 0) {
+                        header.classList.add('header--scrolled');
+                    } else {
+                        header.classList.remove('header--scrolled');
+                    }
+                }
+
+                // Добавляем класс видимости для анимаций
+                if (destination && destination.item) {
+                    destination.item.classList.add('section--visible');
+                }
+            },
+
+            // Callback при выходе из секции
+            onLeave: function (origin, destination, direction) {
+                closeMobileMenu();
+            },
+
+            // Callback при изменении responsive режима
+            afterResponsive: function (isResponsive) {
+                console.log('📱 Responsive mode:', isResponsive ? 'ON' : 'OFF');
+            }
+        });
+
+        console.log('✅ fullPage.js успешно инициализирован');
+
+    } catch (error) {
+        console.error('❌ Ошибка инициализации fullPage.js:', error);
+    }
+
+    // ==========================================================================
+    // ИНИЦИАЛИЗАЦИЯ SWIPER.JS
+    // ==========================================================================
+
+    if (typeof Swiper === 'undefined') {
+        console.error('❌ Swiper.js не загружен!');
+    } else {
+        try {
+            new Swiper('.menu__swiper', {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                centeredSlides: false,
+                loop: true,
+                speed: 600,
+
+                autoplay: {
+                    delay: 4000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true
+                },
+
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true
+                },
+
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev'
+                },
+
+                breakpoints: {
+                    480: {
+                        slidesPerView: 1.5,
+                        spaceBetween: 20
+                    },
+                    768: {
+                        slidesPerView: 2,
+                        spaceBetween: 25
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 30
+                    },
+                    1280: {
+                        slidesPerView: 3,
+                        spaceBetween: 40
+                    }
+                },
+
+                a11y: {
+                    prevSlideMessage: 'Предыдущее блюдо',
+                    nextSlideMessage: 'Следующее блюдо'
+                }
+            });
+
+            console.log('✅ Swiper.js успешно инициализирован');
+
+        } catch (error) {
+            console.error('❌ Ошибка инициализации Swiper.js:', error);
+        }
+    }
+
+    // ==========================================================================
+    // ФОРМА БРОНИРОВАНИЯ
+    // ==========================================================================
+
+    const bookingForm = document.getElementById('bookingForm');
+
+    if (bookingForm) {
+        bookingForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(bookingForm);
+            const data = {};
+
+            formData.forEach(function (value, key) {
+                data[key] = value;
+            });
+
+            // Валидация
+            if (!data.name || !data.phone || !data.date || !data.time || !data.guests) {
+                showNotification('Пожалуйста, заполните все поля', 'error');
+                return;
+            }
+
+            // Показываем успех (в реальном приложении здесь будет отправка на сервер)
+            showNotification('Спасибо! Мы свяжемся с вами для подтверждения брони.', 'success');
+            bookingForm.reset();
+        });
+    }
+
+    // ==========================================================================
     // УСТАНОВКА МИНИМАЛЬНОЙ ДАТЫ В ФОРМЕ
     // ==========================================================================
 
     const dateInput = document.getElementById('date');
     if (dateInput) {
-        // Устанавливаем минимальную дату - сегодня
         const today = new Date().toISOString().split('T')[0];
         dateInput.setAttribute('min', today);
     }
@@ -356,29 +343,36 @@ document.addEventListener('DOMContentLoaded', function () {
     // ==========================================================================
     // ПЛАВНАЯ ПРОКРУТКА ДЛЯ ЯКОРНЫХ ССЫЛОК
     // ==========================================================================
-    // Обрабатываем все ссылки, начинающиеся с #
 
     document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
         anchor.addEventListener('click', function (e) {
             const targetId = this.getAttribute('href');
 
-            // Если это ссылка на секцию fullPage, используем API fullPage
             if (targetId && targetId !== '#') {
                 const sectionAnchor = targetId.replace('#', '');
 
-                // Проверяем, существует ли секция с таким якорем
                 if (['home', 'about', 'menu', 'contacts'].includes(sectionAnchor)) {
                     e.preventDefault();
-                    fullpage_api.moveTo(sectionAnchor);
+
+                    // Проверяем доступность fullpage_api
+                    if (typeof fullpage_api !== 'undefined' && fullpage_api.moveTo) {
+                        fullpage_api.moveTo(sectionAnchor);
+                    } else {
+                        // Fallback - обычный скролл
+                        const targetSection = document.querySelector('[data-anchor="' + sectionAnchor + '"]');
+                        if (targetSection) {
+                            targetSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
                 }
             }
         });
     });
 
     // ==========================================================================
-    // ЛОГИРОВАНИЕ ДЛЯ ОТЛАДКИ
+    // ОТЛАДОЧНАЯ ИНФОРМАЦИЯ
     // ==========================================================================
-    console.log('✅ Сайт ресторана LUMIÈRE успешно загружен');
-    console.log('📦 fullPage.js инициализирован');
-    console.log('🎠 Swiper.js инициализирован');
+    console.log('🍽️ Сайт ресторана LUMIÈRE загружен');
+    console.log('📱 Мобильное устройство:', isMobile);
+    console.log('👆 Touch устройство:', isTouch);
 });
