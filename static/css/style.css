@@ -248,6 +248,10 @@ button {
     transition: color var(--transition-fast);
 }
 
+.mobile-only {
+    display: none;
+}
+
 /* Подчёркивание при наведении */
 .nav__link::after {
     content: '';
@@ -1094,6 +1098,33 @@ button {
     /* === Hero секция === */
     .hero__content {
         padding: 0 1.5rem;
+    }
+
+    /* === Мобильное меню (стили элементов) === */
+    .mobile-only {
+        display: block;
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .mobile-book-btn {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 1rem 2rem;
+        background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+        color: var(--color-bg-dark) !important;
+        font-family: var(--font-body);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-radius: var(--border-radius);
+        box-shadow: 0 10px 30px rgba(201, 169, 98, 0.2);
+    }
+
+    .mobile-book-btn:active {
+        transform: scale(0.98);
     }
 
     .hero__subtitle {
