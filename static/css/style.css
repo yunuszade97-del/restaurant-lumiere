@@ -1010,15 +1010,24 @@ button {
     }
 
     /* === Секции в режиме обычной прокрутки === */
-    /* Применяется ТОЛЬКО когда fullPage.js в responsive режиме */
-    .fp-responsive .section {
+    /* === Секции в режиме обычной прокрутки (Native Scroll) === */
+
+    html,
+    body {
+        overflow-y: auto !important;
+        height: auto !important;
+        -webkit-overflow-scrolling: touch;
+        /* Плавный скролл на iOS */
+    }
+
+    .section {
         min-height: auto !important;
         height: auto !important;
         padding: 80px 0 60px !important;
     }
 
     /* Hero секция на весь экран - всегда */
-    .fp-responsive .hero {
+    .hero {
         min-height: 100vh !important;
         padding: 0 !important;
     }
@@ -1026,9 +1035,11 @@ button {
     /* === Шапка и навигация === */
     .header {
         height: var(--header-height);
-        background: rgba(13, 13, 13, 0.95);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: rgba(13, 13, 13, 0.98);
+        /* Less transparency for performance */
+        backdrop-filter: none;
+        /* Disable blur */
+        -webkit-backdrop-filter: none;
     }
 
     .header__container {

@@ -154,88 +154,93 @@ window.addEventListener('load', function () {
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
     try {
-        new fullpage('#fullpage', {
-            // Якоря для навигации
-            anchors: ['home', 'about', 'menu', 'contacts'],
+        // Инициализируем fullPage ТОЛЬКО на десктопе
+        if (!isMobile) {
+            new fullpage('#fullpage', {
+                // Якоря для навигации
+                anchors: ['home', 'about', 'menu', 'contacts'],
 
-            // Привязка к меню
-            menu: '#nav',
+                // Привязка к меню
+                menu: '#nav',
 
-            // Скорость прокрутки
-            scrollingSpeed: 800,
+                // Скорость прокрутки
+                scrollingSpeed: 800,
 
-            // Эффект перехода
-            easingcss3: 'ease-out',
+                // Эффект перехода
+                easingcss3: 'ease-out',
 
-            // Автоматическая прокрутка (отключаем на мобильных)
-            autoScrolling: !isMobile,
+                // Боковая навигация
+                navigation: true,
+                navigationPosition: 'right',
+                navigationTooltips: ['Главная', 'О нас', 'Меню', 'Контакты'],
 
-            // Подгонка к секции
-            fitToSection: !isMobile,
-            fitToSectionDelay: 500,
+                // Скролл внутри секции
+                scrollOverflow: true,
+                scrollOverflowReset: false,
 
-            // Адаптивность - отключаем fullPage на маленьких экранах
-            responsiveWidth: 768,
-            responsiveHeight: 0,
+                // Нормальный скролл для этих элементов
+                normalScrollElements: '.swiper-wrapper, .booking-form, .contacts__form-container',
 
-            // Боковая навигация (только на десктопе)
-            navigation: !isMobile && !isTouch,
-            navigationPosition: 'right',
-            navigationTooltips: ['Главная', 'О нас', 'Меню', 'Контакты'],
+                // CSS3 анимации
+                css3: true,
 
-            // Скролл внутри секции (отключаем на мобильных для производительности)
-            scrollOverflow: !isMobile,
-            scrollOverflowReset: false,
+                // Лицензия
+                licenseKey: 'gplv3-license',
 
-            // Нормальный скролл для этих элементов
-            normalScrollElements: '.swiper-wrapper, .booking-form, .contacts__form-container',
+                // Callback после загрузки секции
+                afterLoad: function (origin, destination, direction) {
+                    if (destination && destination.anchor) {
+                        updateActiveNavLink(destination.anchor);
+                    }
 
-            // Чувствительность для touch устройств
-            touchSensitivity: 15,
+                    if (header) {
+                        if (destination && destination.index > 0) {
+                            header.classList.add('header--scrolled');
+                        } else {
+                            header.classList.remove('header--scrolled');
+                        }
+                    }
 
-            // CSS3 анимации
-            css3: true,
+                    if (destination && destination.item) {
+                        destination.item.classList.add('section--visible');
+                    }
+                },
 
-            // Лицензия
-            licenseKey: 'gplv3-license',
-
-            // Callback после загрузки секции
-            afterLoad: function (origin, destination, direction) {
-                // Обновляем активную ссылку в меню
-                if (destination && destination.anchor) {
-                    updateActiveNavLink(destination.anchor);
+                onLeave: function (origin, destination, direction) {
+                    closeMobileMenu();
                 }
+            });
+            console.log('✅ fullPage.js инициализирован (Desktop)');
+        } else {
+            console.log('📱 Мобильная версия: fullPage.js отключен для стабильной прокрутки');
+            // Включаем видимость секций сразу
+            document.querySelectorAll('.section').forEach(sec => sec.classList.add('section--visible'));
 
-                // Управление стилем header
+            // Простой скролл-спай для мобильных
+            window.addEventListener('scroll', function () {
+                const scrollPos = window.scrollY + 100;
+
+                // Хедер
                 if (header) {
-                    if (destination && destination.index > 0) {
+                    if (window.scrollY > 50) {
                         header.classList.add('header--scrolled');
                     } else {
                         header.classList.remove('header--scrolled');
                     }
                 }
 
-                // Добавляем класс видимости для анимаций
-                if (destination && destination.item) {
-                    destination.item.classList.add('section--visible');
-                }
-            },
-
-            // Callback при выходе из секции
-            onLeave: function (origin, destination, direction) {
-                closeMobileMenu();
-            },
-
-            // Callback при изменении responsive режима
-            afterResponsive: function (isResponsive) {
-                console.log('📱 Responsive mode:', isResponsive ? 'ON' : 'OFF');
-            }
-        });
-
-        console.log('✅ fullPage.js успешно инициализирован');
+                // Активная ссылка
+                document.querySelectorAll('section').forEach(section => {
+                    if (section.offsetTop <= scrollPos && (section.offsetTop + section.offsetHeight) > scrollPos) {
+                        const id = section.getAttribute('data-anchor') || section.id;
+                        if (id) updateActiveNavLink(id);
+                    }
+                });
+            });
+        }
 
     } catch (error) {
-        console.error('❌ Ошибка инициализации fullPage.js:', error);
+        console.error('❌ Ошибка инициализации:', error);
     }
 
     // ==========================================================================
