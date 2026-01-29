@@ -832,6 +832,30 @@ button {
     }
 }
 
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 @keyframes bounce {
 
     0%,
@@ -851,10 +875,66 @@ button {
     }
 }
 
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Анимация появления секции */
+.section--visible .section-subtitle,
+.section--visible .section-title,
+.section--visible .about__text,
+.section--visible .about__features {
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+/* ==============================================================================
+   FULLPAGE.JS NAVIGATION (боковые точки)
+   ============================================================================== */
+#fp-nav {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#fp-nav ul li {
+    margin: 12px 7px;
+}
+
+#fp-nav ul li a span {
+    background: rgba(201, 169, 98, 0.3);
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+}
+
+#fp-nav ul li a.active span,
+#fp-nav ul li:hover a span {
+    background: var(--color-gold);
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+}
+
+#fp-nav ul li .fp-tooltip {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--color-gold);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
 /* ==============================================================================
    АДАПТИВНЫЙ ДИЗАЙН (МЕДИА-ЗАПРОСЫ)
    ==============================================================================
-   Mobile-first: сначала стили для мобильных, затем расширения для больших экранов
+   Mobile-first подход с улучшенными touch-targets и типографикой
    ============================================================================== */
 
 /* ------ Планшеты (до 1024px) ------ */
@@ -884,7 +964,7 @@ button {
 
     .contacts__container {
         grid-template-columns: 1fr;
-        gap: 3rem;
+        gap: 2rem;
     }
 
     .contacts__info {
@@ -897,18 +977,57 @@ button {
     }
 }
 
-/* ------ Мобильные (до 768px) ------ */
+/* ------ Мобильные устройства (до 768px) ------ */
 @media (max-width: 768px) {
+
+    /* === Глобальные переменные === */
     :root {
-        --header-height: 70px;
+        --header-height: 60px;
+    }
+
+    html {
+        font-size: 15px;
+    }
+
+    /* === Секции в режиме обычной прокрутки === */
+    .section {
+        min-height: auto !important;
+        height: auto !important;
+        padding: 80px 0 60px !important;
+    }
+
+    /* Hero секция на весь экран */
+    .hero {
+        min-height: 100vh !important;
+        padding: 0 !important;
+    }
+
+    /* === Шапка и навигация === */
+    .header {
+        height: var(--header-height);
+        background: rgba(13, 13, 13, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .header__container {
+        padding: 0 1rem;
+    }
+
+    .logo-text {
+        font-size: 1.5rem;
     }
 
     /* Показываем бургер-меню */
     .header__burger {
         display: flex;
+        width: 44px;
+        height: 44px;
+        /* Минимальный размер для touch target */
+        padding: 10px;
     }
 
-    /* Скрываем десктопную навигацию */
+    /* Мобильная навигация */
     .header__nav {
         position: fixed;
         top: 0;
@@ -917,11 +1036,13 @@ button {
         bottom: 0;
         background: rgba(13, 13, 13, 0.98);
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         opacity: 0;
         visibility: hidden;
-        transition: all var(--transition-normal);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1000;
     }
 
     .header__nav.active {
@@ -931,73 +1052,375 @@ button {
 
     .nav__list {
         flex-direction: column;
-        gap: 2rem;
+        gap: 0;
         text-align: center;
+        width: 100%;
+    }
+
+    .nav__item {
+        width: 100%;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav__item:last-child {
+        border-bottom: none;
+    }
+
+    .nav__link {
+        display: block;
+        font-size: 1.5rem;
+        padding: 1.25rem 2rem;
+        /* Большой touch target */
+        min-height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav__link::after {
+        display: none;
+    }
+
+    .nav__link:active {
+        background: rgba(201, 169, 98, 0.1);
+    }
+
+    /* Скрываем кнопку бронирования в шапке */
+    .header__btn {
+        display: none;
+    }
+
+    /* === Hero секция === */
+    .hero__content {
+        padding: 0 1.5rem;
+    }
+
+    .hero__subtitle {
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero__title {
+        font-size: clamp(2.5rem, 14vw, 4rem);
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+    }
+
+    .hero__description {
+        font-size: 1rem;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+        padding: 0 0.5rem;
+    }
+
+    .hero__btn {
+        width: 100%;
+        max-width: 280px;
+        padding: 1rem 2rem;
+        /* Удобный размер для нажатия */
+        min-height: 52px;
+    }
+
+    .hero__scroll-indicator {
+        bottom: 1.5rem;
+    }
+
+    .hero__scroll-indicator span {
+        font-size: 0.625rem;
+    }
+
+    .scroll-arrow {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* === About секция === */
+    .about__container {
+        padding: 0 1.5rem;
+        gap: 2rem;
+    }
+
+    .about__image-wrapper {
+        max-width: 280px;
+    }
+
+    .about__image-frame {
+        display: none;
+    }
+
+    .about__text {
+        font-size: 1rem;
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .about__features {
+        margin-top: 1.5rem;
+    }
+
+    .about__feature {
+        padding: 1rem 0;
+        /* Увеличенные отступы для touch */
+    }
+
+    /* === Menu секция === */
+    .menu__container {
+        padding: 0 1rem;
+    }
+
+    .menu__header {
+        margin-bottom: 2rem;
+    }
+
+    .menu__description {
+        font-size: 1rem;
+    }
+
+    .menu__swiper {
+        padding: 1rem 0 3rem;
+    }
+
+    /* Скрываем стрелки на мобильных */
+    .swiper-button-prev,
+    .swiper-button-next {
+        display: none !important;
+    }
+
+    .dish-card__image-container {
+        height: 200px;
+    }
+
+    .dish-card__content {
+        padding: 1.25rem;
+    }
+
+    .dish-card__title {
+        font-size: 1.25rem;
+    }
+
+    .dish-card__description {
+        font-size: 0.9rem;
+    }
+
+    /* Увеличенная пагинация для touch */
+    .swiper-pagination-bullet {
+        width: 10px;
+        height: 10px;
+        margin: 0 6px !important;
+    }
+
+    /* === Contacts секция === */
+    .contacts__container {
+        padding: 0 1.5rem;
+        gap: 2rem;
+    }
+
+    .contact-item {
+        padding: 1rem 0;
+    }
+
+    .contact-item__icon {
+        font-size: 1.25rem;
+        width: 32px;
+    }
+
+    .contact-item__value {
+        font-size: 1rem;
+    }
+
+    /* Сделаем ссылки кликабельными с хорошим touch target */
+    .contact-item__link {
+        display: inline-block;
+        padding: 0.25rem 0;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* === Форма бронирования === */
+    .contacts__form-container {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .contacts__form-title {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-input {
+        padding: 1rem;
+        font-size: 16px;
+        /* 16px предотвращает автозум на iOS */
+        min-height: 52px;
+        /* Удобный размер для touch */
+    }
+
+    .booking-form .btn {
+        min-height: 52px;
+        font-size: 1rem;
+    }
+
+    /* === Footer === */
+    .footer {
+        padding: 1.25rem 1.5rem;
+    }
+
+    .footer__container {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .footer__copyright {
+        font-size: 0.8125rem;
+    }
+
+    .footer__social-link {
+        width: 44px;
+        height: 44px;
+        /* Минимальный touch target */
+    }
+}
+
+/* ------ Маленькие мобильные (до 480px) ------ */
+@media (max-width: 480px) {
+    html {
+        font-size: 14px;
+    }
+
+    .hero__subtitle {
+        font-size: 0.6875rem;
+    }
+
+    .hero__title {
+        font-size: clamp(2rem, 16vw, 3rem);
+    }
+
+    .section-subtitle {
+        font-size: 0.75rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .btn {
+        padding: 0.875rem 1.25rem;
+        font-size: 0.8125rem;
+    }
+
+    .dish-card__image-container {
+        height: 180px;
+    }
+
+    .about__image-wrapper {
+        max-width: 240px;
+    }
+
+    .contact-item__content {
+        gap: 0.125rem;
+    }
+
+    .contact-item__label {
+        font-size: 0.6875rem;
+    }
+
+    .contact-item__value {
+        font-size: 0.9375rem;
+    }
+}
+
+/* ------ Очень маленькие экраны (до 360px) ------ */
+@media (max-width: 360px) {
+    .hero__title {
+        font-size: 2rem;
+        letter-spacing: 0.05em;
     }
 
     .nav__link {
         font-size: 1.25rem;
     }
 
-    /* Скрываем кнопку бронирования в шапке на мобильных */
-    .header__btn {
-        display: none;
-    }
-
-    /* Hero */
-    .hero__title {
-        font-size: clamp(2.5rem, 12vw, 4rem);
-    }
-
-    .hero__description {
-        font-size: 1rem;
-    }
-
-    /* About */
-    .about__image-frame {
-        display: none;
-    }
-
-    /* Menu */
-    .swiper-button-prev,
-    .swiper-button-next {
-        display: none !important;
-    }
-
-    /* Form */
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-
-    .contacts__form-container {
-        padding: 2rem 1.5rem;
-    }
-
-    /* Footer */
-    .footer__container {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
+    .about__container,
+    .menu__container,
+    .contacts__container {
+        padding: 0 1rem;
     }
 }
 
-/* ------ Маленькие мобильные (до 480px) ------ */
-@media (max-width: 480px) {
-    .hero__subtitle {
-        font-size: 0.8125rem;
-        letter-spacing: 0.2em;
+/* ------ Ландшафтная ориентация на мобильных ------ */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        min-height: 100vh !important;
     }
 
-    .section-title {
-        font-size: 1.75rem;
+    .hero__content {
+        padding-top: 60px;
     }
 
-    .btn {
-        padding: 0.875rem 1.5rem;
-        font-size: 0.875rem;
+    .hero__title {
+        font-size: 2.5rem;
     }
 
-    .dish-card__image-container {
-        height: 180px;
+    .hero__description {
+        display: none;
+    }
+
+    .hero__scroll-indicator {
+        display: none;
+    }
+}
+
+/* ------ Улучшения для touch-устройств ------ */
+@media (hover: none) and (pointer: coarse) {
+
+    /* Убираем hover-эффекты на touch */
+    .btn--primary:hover {
+        transform: none;
+    }
+
+    .dish-card:hover {
+        transform: none;
+    }
+
+    .dish-card:hover .dish-card__image {
+        transform: none;
+    }
+
+    /* Активное состояние вместо hover */
+    .btn--primary:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+
+    .dish-card:active {
+        transform: scale(0.98);
+    }
+
+    .nav__link:active {
+        color: var(--color-gold);
+        background: rgba(201, 169, 98, 0.1);
+    }
+}
+
+/* ------ Поддержка Safe Area для iPhone с notch ------ */
+@supports (padding-top: env(safe-area-inset-top)) {
+    .header {
+        padding-top: env(safe-area-inset-top);
+    }
+
+    .header__nav {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .footer {
+        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
     }
 }
