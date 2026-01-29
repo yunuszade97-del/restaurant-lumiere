@@ -1,28 +1,10 @@
-# ==============================================================================
-# GIT IGNORE
-# ==============================================================================
-
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
 venv/
-ENV/
 
-# Переменные окружения (ВАЖНО - не коммитить секреты!)
+# Environment (don't commit secrets!)
 .env
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
 
 # OS
 .DS_Store
-Thumbs.db
-
-# Logs
-*.log
