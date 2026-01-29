@@ -657,14 +657,24 @@ button {
 }
 
 .contacts__container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* Center vertically as requested/implied by "row" usually, or flex-start? original was grid which stretches. Let's use flex-start or stretch. Original snippet had align-items: center at line 688? Yes. */
+    justify-content: space-between;
     gap: 4rem;
     max-width: var(--container-max);
     margin: 0 auto;
     padding: 4rem 2rem 2rem;
     flex: 1;
-    align-items: center;
+    width: 100%;
+}
+
+.contacts__info,
+.contacts__form-container {
+    flex: 1;
+    width: 100%;
+    /* Ensure full width when stacked or flexible when row */
 }
 
 .contacts__info {
@@ -972,8 +982,9 @@ button {
     }
 
     .contacts__container {
-        grid-template-columns: 1fr;
+        flex-direction: column;
         gap: 2rem;
+        /* gap-8 (2rem) as requested */
     }
 
     .contacts__info {
@@ -1301,6 +1312,7 @@ button {
     .booking-form .btn {
         min-height: 52px;
         font-size: 1rem;
+        width: 100%;
     }
 
     /* === Footer === */
