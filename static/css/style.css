@@ -818,6 +818,24 @@ button {
     color: var(--color-text-muted);
 }
 
+.footer__credit {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 1rem;
+    text-align: center;
+    width: 100%;
+}
+
+.footer__credit a {
+    color: var(--color-gold);
+    text-decoration: none;
+    transition: opacity var(--transition-fast);
+}
+
+.footer__credit a:hover {
+    opacity: 0.8;
+}
+
 .footer__social {
     display: flex;
     gap: 1rem;
