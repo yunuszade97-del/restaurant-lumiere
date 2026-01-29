@@ -514,14 +514,15 @@ button {
 }
 
 /* ==============================================================================
-   СЕКЦИЯ "МЕНЮ" (SWIPER СЛАЙДЕР)
+   СЕКЦИЯ МЕНЮ (GRID)
    ============================================================================== */
 .menu {
     background: linear-gradient(135deg, var(--color-bg-dark) 0%, #1a1a2e 100%);
 }
 
 .menu__container {
-    max-width: var(--container-max);
+    width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
     height: 100%;
@@ -538,33 +539,58 @@ button {
 .menu__description {
     font-size: 1.125rem;
     color: var(--color-text-muted);
-    max-width: 500px;
-    margin: 0 auto;
+    max-width: 600px;
+    margin: 1rem auto 0;
 }
 
-/* Swiper контейнер */
-.menu__swiper {
+.menu__grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    /* Mobile default */
+    gap: 2rem;
     width: 100%;
     padding: 2rem 0 4rem;
+}
+
+@media (min-width: 768px) {
+
+    /* Tablet and larger */
+    .menu__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+
+    /* Desktop */
+    .menu__grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 /* Карточка блюда */
 .dish-card {
     background: var(--color-bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: var(--border-radius);
     overflow: hidden;
     transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .dish-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    border-color: rgba(201, 169, 98, 0.3);
 }
 
 .dish-card__image-container {
     position: relative;
-    height: 220px;
+    height: 250px;
     overflow: hidden;
+    width: 100%;
 }
 
 .dish-card__image {
@@ -608,38 +634,17 @@ button {
     line-height: 1.6;
 }
 
-/* Стили кнопок Swiper */
-.swiper-button-prev,
-.swiper-button-next {
-    color: var(--color-gold) !important;
-    width: 50px !important;
-    height: 50px !important;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    transition: all var(--transition-normal);
+/* Padding adjustments based on user request (py-12 mobile, py-24 desktop) */
+.menu__grid {
+    padding: 3rem 0;
+    /* py-12 */
 }
 
-.swiper-button-prev:hover,
-.swiper-button-next:hover {
-    background: var(--color-gold);
-    color: var(--color-bg-dark) !important;
-}
-
-.swiper-button-prev::after,
-.swiper-button-next::after {
-    font-size: 1.25rem !important;
-}
-
-/* Пагинация Swiper */
-.swiper-pagination-bullet {
-    width: 12px;
-    height: 12px;
-    background: rgba(255, 255, 255, 0.3);
-    opacity: 1;
-}
-
-.swiper-pagination-bullet-active {
-    background: var(--color-gold);
+@media (min-width: 1024px) {
+    .menu__grid {
+        padding: 6rem 0;
+        /* py-24 */
+    }
 }
 
 /* ==============================================================================

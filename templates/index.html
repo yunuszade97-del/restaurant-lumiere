@@ -111,38 +111,21 @@
             </p>
         </div>
 
-        <!-- Swiper контейнер - обязательная структура для Swiper.js -->
-        <div class="swiper menu__swiper">
-            <!-- swiper-wrapper - обёртка для слайдов -->
-            <div class="swiper-wrapper">
-                <!-- Цикл Jinja2 по элементам меню из app.py -->
-                {% for item in menu_items %}
-                <!-- swiper-slide - обязательный класс для каждого слайда -->
-                <div class="swiper-slide">
-                    <article class="dish-card">
-                        <!-- Изображение блюда -->
-                        <div class="dish-card__image-container">
-                            <img src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}"
-                                class="dish-card__image" loading="lazy">
-                            <!-- Бейдж с ценой -->
-                            <span class="dish-card__price">{{ item.price }}</span>
-                        </div>
-                        <!-- Информация о блюде -->
-                        <div class="dish-card__content">
-                            <h3 class="dish-card__title">{{ item.name }}</h3>
-                            <p class="dish-card__description">{{ item.description }}</p>
-                        </div>
-                    </article>
+        <!-- Grid сетка -->
+        <div class="menu__grid">
+            {% for item in menu_items %}
+            <div class="dish-card">
+                <div class="dish-card__image-container">
+                    <img src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}"
+                        class="dish-card__image" loading="lazy">
+                    <span class="dish-card__price">{{ item.price }}</span>
                 </div>
-                {% endfor %}
+                <div class="dish-card__content">
+                    <h3 class="dish-card__title">{{ item.name }}</h3>
+                    <p class="dish-card__description">{{ item.description }}</p>
+                </div>
             </div>
-
-            <!-- Кнопки навигации слайдера -->
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-
-            <!-- Пагинация (точки) -->
-            <div class="swiper-pagination"></div>
+            {% endfor %}
         </div>
     </div>
 </section>

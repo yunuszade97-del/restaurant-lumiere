@@ -239,67 +239,9 @@ window.addEventListener('load', function () {
     }
 
     // ==========================================================================
-    // ИНИЦИАЛИЗАЦИЯ SWIPER.JS
+    // СЛАЙДЕРЫ УДАЛЕНЫ (переход на Grid Layout)
     // ==========================================================================
 
-    if (typeof Swiper === 'undefined') {
-        console.error('❌ Swiper.js не загружен!');
-    } else {
-        try {
-            new Swiper('.menu__swiper', {
-                slidesPerView: 1,
-                spaceBetween: 30,
-                centeredSlides: false,
-                loop: true,
-                speed: 600,
-
-                autoplay: {
-                    delay: 4000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true
-                },
-
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true
-                },
-
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev'
-                },
-
-                breakpoints: {
-                    480: {
-                        slidesPerView: 1.5,
-                        spaceBetween: 20
-                    },
-                    768: {
-                        slidesPerView: 2,
-                        spaceBetween: 25
-                    },
-                    1024: {
-                        slidesPerView: 3,
-                        spaceBetween: 30
-                    },
-                    1280: {
-                        slidesPerView: 3,
-                        spaceBetween: 40
-                    }
-                },
-
-                a11y: {
-                    prevSlideMessage: 'Предыдущее блюдо',
-                    nextSlideMessage: 'Следующее блюдо'
-                }
-            });
-
-            console.log('✅ Swiper.js успешно инициализирован');
-
-        } catch (error) {
-            console.error('❌ Ошибка инициализации Swiper.js:', error);
-        }
-    }
 
     // ==========================================================================
     // ФОРМА БРОНИРОВАНИЯ
