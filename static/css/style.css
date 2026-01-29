@@ -1301,12 +1301,33 @@ button {
         grid-template-columns: 1fr;
     }
 
+    /* Отключаем тяжелые эффекты для производительности */
+    .header--scrolled {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(13, 13, 13, 0.98) !important;
+        box-shadow: none !important;
+    }
+
     .form-input {
         padding: 1rem;
         font-size: 16px;
         /* 16px предотвращает автозум на iOS */
         min-height: 52px;
         /* Удобный размер для touch */
+        appearance: none;
+        /* Убирает стандартные стили iOS */
+        -webkit-appearance: none;
+        border-radius: var(--border-radius);
+    }
+
+    /* Возвращаем стрелку для select */
+    select.form-input {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1.25em;
+        padding-right: 2.5rem;
     }
 
     .booking-form .btn {

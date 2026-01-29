@@ -183,8 +183,8 @@ window.addEventListener('load', function () {
             navigationPosition: 'right',
             navigationTooltips: ['Главная', 'О нас', 'Меню', 'Контакты'],
 
-            // Скролл внутри секции
-            scrollOverflow: true,
+            // Скролл внутри секции (отключаем на мобильных для производительности)
+            scrollOverflow: !isMobile,
             scrollOverflowReset: false,
 
             // Нормальный скролл для этих элементов
